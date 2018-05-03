@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>event</title>
+    <script src="./js/d3.js"></script>
+</head>
+
+<body>
+
+    <script>
+        var body = d3.select('body')
+        var duration = 3000
+
+        body.append('div')
+            .classed('box', true)
+            .style('background-color', 'lightblue')
+            .style('color', '#fff')
+            .style('width','100px')
+            .style('height','100px')
+            .text((d, i) => {
+                return 'waiting'
+            })
+            .transition()
+            .duration(duration)
+            .delay(1000)
+            .each('start', function () {
+                console.log(arguments)
+                d3.select(this)
+                    .text(() => {
+                        return 'transforming'
+                    })
+            })
+            .each('end', function () {
+                console.log(arguments)
+                d3.select(this)
+                    .text(() => {
+                        return 'done'
+                    })
+            })
+            .style('margin-left','600px')
+    </script>
+
+</body>
+
+</html>

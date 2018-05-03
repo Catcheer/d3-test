@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>color</title>
+    <script src="./js/d3.js"></script>
+</head>
+
+<body>
+
+
+</body>
+<script>
+    var max = 20
+    var data = []
+    for (let i = 0; i < max; i++) {
+        data.push(i)
+    }
+
+    function proviedScaleSize(povit) {
+        var scale = d3.scale.linear()
+            .domain([0, povit, max])
+            .range(['#00ff00', '#ff0000', '#00ff00'])
+        return scale
+    }
+
+    function render(data, scale, selector) {
+        d3.select(selector)
+            .selectAll('div.cell')
+            .data(data)
+            .enter()
+            .append('div')
+            .classed('cell', true)
+        d3.selectAll('div.cell')
+            .data(data)
+            .exit()
+            .remove()
+        d3.selectAll('div.cell')
+            .data(data)
+            .style('color', (d) => {
+                return scale(d)
+            })
+            .text((d) => {
+                return scale(d)
+            })
+    }
+
+
+    render(data, proviedScaleSize(10), 'body')
+</script>
+
+</html>

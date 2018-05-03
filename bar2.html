@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="./js/d3.js"></script>
+    <style>
+        .yaxis path,
+        .yaxis line {
+            fill: none;
+            stroke: black;
+            shape-rendering: crispEdges;
+        }
+
+        .xaxis path,
+        .xaxis line {
+            fill: none;
+            stroke: black;
+            shape-rendering: crispEdges;
+        }
+    </style>
+</head>
+
+<body>
+
+</body>
+
+<script>
+    const width = 500
+    const height = 300
+    const rectPadding = 10
+
+    const padding = {
+        top: 20,
+        right: 30,
+        bottom: 20,
+        left: 20
+    }
+
+
+    const data = [2, 65, 21, 5, 54, 45, 5, 12]
+
+
+    const xScale = d3.scale.ordinal()
+        .domain(d3.range(data.length))
+        .rangeRoundBands([0, width - padding.left - padding.right])
+
+    //y轴比例尺
+
+    const scaleY = d3.scale.linear()
+        .domain([0, d3.max(data)])
+        .range([0, height - padding.top - padding.bottom])
+
+
+    //y轴坐标轴
+    const yAxis = d3.svg.axis()
+        .scale(scaleY)
+        .orient('left')
+        .ticks(7)
+
+    // x轴坐标
+    const xAxis = d3.svg.axis()
+        .scale(xScale)
+        .orient('bottom')
+        .ticks(7)
+
+    //添加svg画布
+
+    const svg = d3.select('body')
+        .append('svg')
+        .attr('width', width)
+        .attr('height', height)
+
+
+
+
+    //绘制矩形rect
+
+    svg.selectAll('.myRect')
+        .data(data)
+        .enter()
+        .append('rect')
+        .attr('class', 'myRect')
+        .attr("transform", "translate(" + padding.left + "," + padding.top + ")")
+        .attr('x', (d, i) => {
+
+            return i * xScale.rangeBand()
+        })
+        .attr('y', (d, i) => {
+            return height - padding.top - padding.bottom - scaleY(d)
+        })
+        .attr('width', xScale.rangeBand() - rectPadding)
+        .attr('height', (d, i) => {
+            return scaleY(d)
+        })
+        .attr('fill', '#00f')
+
+    svg.append('g')
+        .attr('transform', 'translate(' + padding.left + ',' + padding.top + ')')
+        .call(yAxis)
+        .attr('class', 'yaxis')
+
+
+    //添加x轴
+    svg.append("g")
+        .attr("class", "xaxis")
+        .attr("transform", "translate(" + padding.left + "," + (height - padding.bottom) + ")")
+        .call(xAxis);
+</script>
+
+
+</html>

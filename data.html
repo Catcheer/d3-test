@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="./js/d3.js"></script>
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        .h-bar {
+            height: 20px;
+            margin-bottom: 5px;
+            background: #eee;
+            text-align: right;
+            /* display: none; */
+        }
+        .selected{
+            background-color: aquamarine;
+        }
+
+        .h-bar span {
+            margin-right: 5px;
+        }
+    </style>
+</head>
+
+<body>
+
+</body>
+
+
+
+<script>
+    const data = []
+
+    function randomValue() {
+        return Math.floor(Math.random() * 10)
+    }
+
+    for (let i = 0; i < 20; i++) {
+        data.push({
+            width: randomValue(),
+            category: 's' + randomValue() % 3
+        })
+    }
+
+
+    const selections = d3.select('body')
+        .selectAll('div.h-bar')
+        .data(data)
+        .enter()
+        .append('div')
+        .attr('class', 'h-bar')
+        .append('span')
+
+
+    d3.selectAll('div.h-bar')
+        .data(data)
+        .style('width', (d, i) => {
+            return d.width * 10 + 'px'
+        })
+        .select('span')
+        .text((d, i) => {
+            return d.category
+        })
+    d3.selectAll('div.h-bar')
+        .filter((d, i) => {
+            return d.category == 's2'
+        })
+        .classed('selected', true)
+</script>
+
+</html>

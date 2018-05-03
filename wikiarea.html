@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>wikiarea</title>
+    <script src="./js/d3.js"></script>
+</head>
+
+<body>
+
+    <div class="controll-wrap">
+        <button onclick="render(0)">Circle</button>
+        <button onclick="render(100)">100</button>
+        <button onclick="render(0,Math.PI)">0,Math.PI</button>
+        <button onclick="render(100,Math.PI)">100,Math.PI</button>
+    </div>
+
+
+    <script>
+        var width = 400,
+            height = 400,
+            fullAngle = 2 * Math.PI,
+            colors = d3.scale.category20c();
+
+
+        var svg = d3.select('body')
+            .append('svg')
+            .classed('pie', true)
+            .attr('width', width)
+            .attr('height', height)
+
+        function render(innerRadius, endAngle) {
+            if (!endAngle) endAngle = fullAngle;
+
+            var data = [{
+                    startAngle: 0,
+                    endAngle: 0.1 * endAngle
+                },
+                {
+                    startAngle: 0.1 * endAngle,
+                    endAngle: 0.2 * endAngle
+                },
+                {
+                    startAngle: 0.2 * endAngle,
+                    endAngle: 0.4 * endAngle
+                },
+                {
+                    startAngle: 0.4 * endAngle,
+                    endAngle: 0.6 * endAngle
+                },
+                {
+                    startAngle: 0.6 * endAngle,
+                    endAngle: 0.7 * endAngle
+                },
+                {
+                    startAngle: 0.7 * endAngle,
+                    endAngle: 0.9 * endAngle
+                },
+                {
+                    startAngle: 0.9 * endAngle,
+                    endAngle: endAngle
+                },
+
+
+            ]
+
+            var arc = d3.svg.arc().outerRadius(150)
+                .innerRadius(innerRadius)
+
+            svg.select('g').remove()
+            svg.append('g')
+                .attr('transform', 'translate(200,200)')
+                .selectAll('path.arc')
+                .data(data)
+                .enter()
+                .append('path')
+                .attr('class', 'arc')
+                .attr('fill', (d, i) => {
+                    return colors(i)
+                })
+                .attr('d', (d, i) => {
+                    return arc(d, i)
+                })
+
+
+        }
+    </script>
+</body>
+
+</html>

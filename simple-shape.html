@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>SimpleShape</title>
+    <script src="./js/d3.js"></script>
+</head>
+
+<body>
+
+    <script>
+        var height = 600,
+            width = 500;
+
+        var body = d3.select('body')
+
+        var svg = body.append('svg')
+            .attr('width', width)
+            .attr('height', height)
+
+        svg.append('line')
+            .attr('x1', 0)
+            .attr('y1', 0)
+            .attr('x2', 100)
+            .attr('y2', 100)
+            .style('stroke', '#f00')
+
+        svg.append('circle')
+            .attr('cx', 200)
+            .attr('cy', 50)
+            .attr('r', 50)
+            .style('stroke', '#f00')
+            .style('fill', '#fff')
+
+        svg.append('rect')
+            .attr('x', 300)
+            .attr('y', 50)
+            .attr('width', 100)
+            .attr('height', 100)
+            .attr('rx', 5)
+            .style('stroke', '#f00')
+            .style('fill', '#fff')
+
+        svg.append('polygon')
+            .attr('points', '0,300 300,200 400,260')
+            .style('stroke', '#f00')
+            .style('fill', '#fff')
+
+        svg.append('path')
+            .attr('d', 'M300,600S320,20  320,600')
+            .style('stroke', '#f00')
+            .style('fill', 'none')
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>dollar</title>
+    <script src="./js/d3.js"></script>
+</head>
+
+<body>
+
+
+    <div id="dollar"></div>
+    <div id="alphabet"></div>
+
+
+
+    <script>
+        d3.interpolators.push((a, b) => {
+            var re = /^\$([0-9,.]+)$/
+            var ma, mb
+            var f = d3.format(',.02f')
+            if ((ma = re.exec(a)) && (mb = re.exec(b))) {
+                a = parseFloat(ma[1])
+                b = parseFloat(mb[1]) - a
+                return function (t) {
+                    return '$' + f(a + b * t)
+                }
+            }
+        })
+
+
+        d3.interpolators.push((a, b) => {
+            var re = /^([a-z])$/,
+                ma, mb;
+            if ((ma = re.exec(a)) && (mb = re.exec(b))) {
+                a = a.charCodeAt(0)
+                var delta = a - b.charCodeAt(0)
+                return function (t) {
+                    return String.fromCharCode(Math.ceil(a - delta * t))
+                }
+            }
+        })
+
+        var alphabetScale = d3.scale.linear()
+            .domain([0, 27])
+            .range(['a', 'z'])
+
+
+        var dollarScale = d3.scale.linear()
+            .domain([0, 11])
+            .range(["$0", "$300"])
+
+        function render(scale, selector) {
+
+            var data = []
+            var max = scale.domain()[1]
+
+            for (let i = 0; i < max; i++) {
+                data.push(i)
+            }
+
+
+            d3.select(selector)
+                .selectAll('div.cell')
+                .data(data)
+                .enter()
+                .append('div')
+                .classed('cell', true)
+            d3.select(selector).selectAll('div.cell')
+                .data(data)
+                .exit()
+                .remove()
+            d3.select(selector).selectAll('div.cell')
+                .data(data)
+                .text((d) => {
+                    return scale(d)
+                })
+
+        }
+
+
+        render(dollarScale, '#dollar')
+        render(alphabetScale,'#alphabet')
+    </script>
+</body>
+
+</html>

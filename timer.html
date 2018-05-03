@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>timer</title>
+    <script src="./js/d3.js"></script>
+</head>
+
+<body>
+
+    <button onclick="countup(100)">countup</button>
+    <button onclick="rest()">reset</button>
+
+
+    <script>
+        var body = d3.select('body')
+        var countdown = body.append('div').append('input')
+        countdown.attr('type', 'button')
+            .attr('value', 0)
+
+
+        function countup(target) {
+            d3.timer(function () {
+                var value = countdown.attr('value')
+                if (target == value) return true
+                countdown.attr('value', ++value)
+            })
+        }
+
+        function rest() {
+            countdown.attr('value', 0)
+        }
+    </script>
+
+</body>
+
+</html>

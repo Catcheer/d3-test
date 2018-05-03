@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>compound</title>
+    <script src="./js/d3.js"></script>
+
+    <style>
+        .cell {
+            color: #fff;
+            display: inline-block;
+            margin-right: 4px;
+            width: 30px;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+
+
+</body>
+<script>
+    var max = 21
+    var data = []
+    for (let i = 0; i < max; i++) {
+        data.push(i)
+    }
+
+    var compoundScale = d3.scale.pow()
+        .exponent(2)
+        .domain([0, max])
+        .range([{
+                color: '#000000',
+                height: '20px'
+            },
+            {
+                color: '#ff0000',
+                height: '160px'
+            }
+        ])
+
+
+    function render(data, scale, selector) {
+        d3.select(selector)
+            .selectAll('div.cell')
+            .data(data)
+            .enter()
+            .append('div')
+            .classed('cell', true)
+        d3.selectAll('div.cell')
+            .data(data)
+            .exit()
+            .remove()
+        d3.selectAll('div.cell')
+            .data(data)
+            .style('height', (d) => {
+                return scale(d).height
+            })
+            .style('background-color', (d) => {
+                return scale(d).color
+            })
+            .text((d, i) => {
+                return i
+            })
+    }
+
+
+    render(data, compoundScale, 'body')
+</script>
+
+</html>

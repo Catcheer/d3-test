@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>customer-interpolator-transition</title>
+    <script src="./js/d3.js"></script>
+</head>
+
+<body>
+
+    <script>
+        d3.interpolators.push(function (a, b) {
+            var re = /^([a-z])$/,
+                ma, mb;
+            if ((ma = re.exec(a)) && (mb = re.exec(b))) {
+                a = a.charCodeAt(0)
+                var delta = a - b.charCodeAt(0)
+                return function (t) {
+                    return String.fromCharCode(Math.ceil(a - delta * t))
+                }
+            }
+        })
+
+        var body = d3.select('body')
+        var countdown = body.append('div').append('input')
+        countdown.attr('type', 'button')
+            .attr('value', 'a')
+            .transition().ease('linear')
+            .duration(4000).delay(300)
+            .attr('value', 'z')
+    </script>
+
+</body>
+
+</html>

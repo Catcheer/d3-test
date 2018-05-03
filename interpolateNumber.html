@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>interpolateNumber</title>
+    <script src="./js/d3.js"></script>
+</head>
+</head>
+
+<body>
+
+    <script>
+        var max = 11
+        var data = []
+
+        for (let i = 0; i < max; i++) {
+            data.push(i)
+        }
+
+
+        var sizeScale = d3.scale.linear()
+            .domain([0, 11])
+            .range(['12px/20px Microsoft YaHei', '32px/50px Microsoft YaHei'])
+
+        function render(data, scale, selector) {
+            d3.select(selector)
+                .selectAll('div.cell')
+                .data(data)
+                .enter()
+                .append('div')
+                .classed('cell', true)
+
+            d3.selectAll('div.cell')
+                .data(data)
+                .exit()
+                .remove()
+
+            d3.selectAll('div.cell')
+                .data(data)
+                .style('display', 'inline-block')
+                .style('font', (d) => {
+                    return scale(d)
+                })
+                .text(d => {
+                    return scale(d)
+                })
+
+        }
+
+        render(data, sizeScale, 'body')
+    </script>
+</body>
+
+</html>

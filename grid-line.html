@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>grid-line</title>
+    <script src="./js/d3.js"></script>
+</head>
+
+<body>
+    <script>
+        var height = 500,
+            width = 500,
+            margin = 50,
+            offset = 50;
+
+        var svg = d3.select('body')
+            .append('svg')
+            .attr('class', 'axis')
+            .attr('width', width)
+            .attr('height', height)
+
+        function renderXAxis() {
+            var axisLength = width - 2 * margin
+
+            var scale = d3.scale.linear()
+                .domain([0, 100])
+                .range([0, axisLength])
+
+            var xAxis = d3.svg.axis()
+                .scale(scale)
+                // .ticks(20)
+                .tickPadding(6)
+                .orient('bottom')
+
+            svg.append('g')
+                .attr('class', 'x-axis')
+                .attr('transform', () => {
+                    return `translate(${margin},${height-margin})`
+                })
+                .call(xAxis)
+
+            d3.selectAll('g.x-axis>g')
+                .append('line')
+                .classed('grid-line', true)
+                .attr("x1", 0)
+                .attr("y1", 0)
+                .attr("x2", 1)
+                .attr("y2", -(height - 2 * margin))
+                .style('stroke', 'lightblue')
+
+        }
+
+        function renderYAxis() {
+            var yaxisLength = height - 2 * margin
+
+            var scale = d3.scale.linear()
+                .domain([100, 0])
+                .range([0, yaxisLength])
+
+            var yaxis = d3.svg.axis()
+                .scale(scale)
+                .ticks(10)
+                .tickPadding(6)
+                .orient('left')
+
+            svg.append('g')
+                .classed('y-axis', true)
+                .attr('transform', () => {
+                    return `translate(${margin},${margin})`
+                })
+                .call(yaxis)
+
+            svg.selectAll('g.y-axis>g')
+                .append('line')
+                .classed('y-grid', true)
+                .attr('x1', 0)
+                .attr('y1', 0)
+                .attr('x2', width - 2 * margin)
+                .attr('y2', 1)
+                .style('stroke', 'lightblue')
+        }
+
+
+        renderXAxis()
+        renderYAxis()
+    </script>
+</body>
+
+</html>

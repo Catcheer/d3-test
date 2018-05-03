@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>multiElementsTransition</title>
+    <script src="./js/d3.js"></script>
+</head>
+
+<body>
+
+    <script>
+        var id = 0,
+            data = [],
+            duration = 500,
+            charHeight = 300,
+            charWidth = 700;
+
+        for (var i = 0; i < 20; i++) {
+            pushData(data)
+        }
+
+        function render(data) {
+            var selection = d3.select('body')
+                .selectAll('div.v-bar')
+                .data(data, (d, i) => {
+                    return d.id
+                })
+
+            selection.enter()
+                .append('div')
+                .attr('class', 'v-bar')
+                .style('position', 'fixed')
+                .style('top', charHeight + 'px')
+                .style('left', (d, i) => {
+                    return barLeft(i + 1) + 'px'
+                })
+                .style('height', '0px')
+                .style('background-color', 'blue')
+                .style('width', '30px')
+                .append('span')
+                .style('color', "#fff")
+
+            selection.transition()
+                .duration(duration)
+                .style('top', (d, i) => {
+                    return charHeight - barHeight(d) + 'px'
+                })
+                .style('left', (d, i) => {
+                    return barLeft(i) + 'px'
+                })
+                .style('height', (d, i) => {
+                    return barHeight(d) + 'px'
+                })
+                .select('span')
+                .text((d, i) => {
+                    return d.value
+                })
+
+
+            selection.exit()
+                .transition()
+                .duration(duration)
+                .style('left', (d, i) => {
+                    return barLeft(- 1) + 'px'
+                })
+                .remove()
+        }
+
+        function pushData(data) {
+            data.push({
+                id: ++id,
+                value: Math.round(Math.random() * charHeight)
+            })
+        }
+
+        function barLeft(i) {
+            return i * (30 + 6)
+        }
+
+        function barHeight(d) {
+            return d.value
+        }
+
+        setInterval(() => {
+            data.shift()
+            pushData(data)
+            render(data)
+        }, 2000)
+
+        render(data)
+
+        d3.select('body')
+            .append('div')
+            .attr('class', 'base-line')
+            .style('position', 'fixed')
+            .style('top', charHeight + 'px')
+            .style('left', '0px')
+            .style('width', charWidth + 'px')
+            .style('height', '1px')
+            .style('background-color', '#000')
+    </script>
+
+</body>
+
+</html>

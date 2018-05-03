@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>area</title>
+
+    <script src="./js/d3.js"></script>
+</head>
+
+<body>
+
+    <script>
+        var height = 500,
+            width = 500,
+            margin = 50,
+            duration = 500;
+
+        var xScale = d3.scale.linear()
+            .domain([0, 10])
+            .range([margin, width - margin])
+
+        var yScale = d3.scale.linear()
+            .domain([0, 10])
+            .range([height - margin, margin])
+
+        var data = d3.range(11).map((i) => {
+            return {
+                x: i,
+                y: Math.sin(i) * 3 + 5
+            }
+        })
+        console.log(data)
+        var svg = d3.select('body')
+            .append('svg')
+            .attr('width', width)
+            .attr('height', height)
+
+
+        // render('linear')
+        // render('linear-closed')
+        // render('step-before')
+        // render('step-after')
+        // render('basis')
+        // render('basis-open')
+        // render('basis-closed')
+        // render('bundle')
+        render('cardinal')
+        // render('cardinal-open')
+        // render('cardinal-closed')
+        renderDots()
+
+        function render(mode) {
+            var line = d3.svg.line()
+                .interpolate(mode)
+                .x((d) => xScale(d.x))
+                .y((d) => yScale(d.y))
+
+            svg.selectAll('path.line')
+                .data([data])
+                .enter()
+                .append('path')
+                .attr('class', "line")
+                .attr('d', (d) => {
+                    return line(d)
+                })
+                .style('stroke', '#111')
+                .style('fill', 'none')
+
+            var area = d3.svg.area()
+                .interpolate(mode)
+                .x((d) => {
+                    return xScale(d.x)
+                })
+                .y0(yScale(0))
+                .y1((d) => {
+                    return yScale(d.y)
+                })
+
+            svg.selectAll('path.area')
+                .data([data])
+                .enter()
+                .append('path')
+                .classed('area', true)
+                .attr('d', (d) => {
+                    return area(d)
+                })
+                .style('stroke', '#aaa')
+                .style('fill', '#999')
+
+        }
+
+        function renderDots() {
+            svg.selectAll('circle')
+                .data(data)
+                .enter()
+                .append('circle')
+                .classed('circle', true)
+                .attr('cx', (d) => xScale(d.x))
+                .attr('cy', (d) => yScale(d.y))
+                .attr('r', 3)
+                .style('stroke', '#111')
+                .style('fill', '#111')
+        }
+    </script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>动态调整坐标轴尺度</title>
+    <script src="./js/d3.js"></script>
+</head>
+
+<body>
+
+    <button class="randomBtn">
+        随机调整
+    </button>
+
+    <script>
+        var width = 500,
+            height = 500,
+            margin = 50,
+            axisWidth = width - 2 * margin,
+            xAxis, yAxis, svg;
+
+
+        //添加svg
+        function createSvg() {
+            svg = d3.select('body')
+                .append('svg')
+                .attr('class', 'axis')
+                .attr('width', width)
+                .attr('height', height)
+        }
+
+        //init domian
+
+        var xScale = d3.scale.linear()
+            .domain([0, 100])
+            .range([0, axisWidth])
+
+        // x轴
+        function rederXAxis() {
+            xAxis = d3.svg.axis()
+                .scale(xScale)
+                .ticks(10)
+                .tickPadding(20)
+                .orient('bottom')
+
+            svg.append('g')
+                .attr('class', 'x-axis')
+                .attr('transform', () => {
+                    return `translate(${margin},${height-margin})`
+                })
+                .call(xAxis)
+            xAxisGridLine()
+        }
+
+        // x轴 grid line
+
+        function xAxisGridLine() {
+            d3.selectAll('g.x-axis>g')
+                .select('line.tick')
+                .remove()
+
+
+
+            d3.selectAll('g.x-axis>g')
+                .append('line')
+                .attr('class', 'tick')
+                .attr('x1', 0)
+                .attr('y1', 0)
+                .attr('x2', 1)
+                .attr('y2', -(height - 2 * margin))
+                .style('stroke', 'lightblue')
+        }
+
+
+        // random domain  
+        function randomDomain() {
+            var max = Math.round(Math.random() * 100)
+            console.log(max)
+            xAxis.scale().domain([0, max])
+           d3.select('.x-axis')
+           .transition()
+           .call(xAxis)
+           xAxisGridLine()
+
+        }
+
+
+        document.body.querySelector('.randomBtn').addEventListener('click', randomDomain)
+
+        createSvg()
+        rederXAxis()
+    </script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>select</title>
+    <script src="./js/d3.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        .h-bar {
+            height: 20px;
+            margin-bottom: 5px;
+            background: #eee;
+            text-align: right;
+        }
+
+        .h-bar span {
+            margin-right: 5px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <p></p>
+    <p></p>
+
+</body>
+
+<script>
+    // console.log(d3.selectAll('div'))
+    // d3.selectAll('div')
+    //     .attr('class', 'red')
+    //     .each(function (d, i) {
+    //         console.log(d3.select(this))
+    //         d3.select(this)
+    //             .append('p')
+    //             .text(i)
+    //             .attr('style', 'color:lightblue')
+    //     })
+
+    // const tr = d3.select('tr, #box')
+
+    const data = [{
+            width: 2,
+            color: 100,
+        },
+        {
+            width: 8,
+            color: 22,
+        }, {
+            width: 3,
+            color: 2,
+        }, {
+            width: 35,
+            color: 45,
+        }, {
+            width: 42,
+            color: 8,
+        },
+    ]
+
+
+    const colorScale = d3.scale.linear()
+        .domain([0, 100])
+        .range(['lightblue', 'blue'])
+
+    function render() {
+        d3.select('body')
+            .selectAll('div.h-bar')
+            .data(data)
+            .enter()
+            .append('div')
+            .attr('class', 'h-bar')
+            .append('span')
+
+        d3.selectAll('div.h-bar')
+            .data(data)
+            .style('width', (d, i) => {
+                return d.width * 5 + 'px'
+            })
+            .style('background-color', (d) => {
+                return colorScale(d.color)
+            })
+            .select('span')
+            .text((d, i) => d.width)
+            .style('color','#fff')
+
+        d3.selectAll('div.h-bar')
+            .data(data)
+            .exit()
+            .remove()
+    }
+
+    function randomValue() {
+        return Math.floor(Math.random() * 100)
+    }
+
+    setInterval(() => {
+        data.shift()
+        data.push({
+            width: randomValue(),
+            color: randomValue()
+        })
+        render()
+    }, 2000)
+    render()
+
+
+
+    console.log(d3.bisect([1,2,3,4,5,6,7,8,9],6))
+</script>
+
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>easing</title>
+    <script src="./js/d3.js"></script>
+</head>
+
+<body>
+
+    <script>
+        var colors = d3.scale.category10()
+
+        var data = ['linear', 'cubic', 'cubic-in-out', 'sin', 'sin-out', 'exp', 'circle', 'back', 'bounce', function (t) {
+            return t * t
+        }]
+
+        d3.select('body')
+            .select('div.cell')
+            .data(data)
+            .enter()
+            .append('div')
+            .attr('class', 'cell')
+            .style('position', 'fixed')
+            .style('top', (d, i) => {
+                return i * 40 + 'px'
+            })
+            .style('left', '800px')
+            .style('width', '160px')
+            .style('height', '30px')
+            .style('background-color', (d, i) => {
+                return colors(i)
+            })
+            .style('color', '#fff')
+            .text((d, i) => {
+                if (typeof d === 'function') return 'custome'
+                return d
+            })
+
+        d3.selectAll('.cell').each(function (d) {
+            d3.select(this)
+                .transition()
+                .duration(1500)
+                .ease(d)
+                .style('left', '0px')
+        })
+    </script>
+
+</body>
+
+</html>

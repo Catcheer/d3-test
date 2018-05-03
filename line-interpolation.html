@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Line-interpolation</title>
+    <script src="./js/d3.js"></script>
+</head>
+
+<body>
+    <script>
+        const width = 500,
+            height = 500,
+            margin = 50;
+
+        var data = [
+            [{
+                    x: 0,
+                    y: 9
+                }, {
+                    x: 1,
+                    y: 7
+                }, {
+                    x: 2,
+                    y: 2
+                }, {
+                    x: 3,
+                    y: 8
+                }, {
+                    x: 4,
+                    y: 6
+                }, {
+                    x: 5,
+                    y: 1
+                },
+                {
+                    x: 6,
+                    y: 2
+                },
+                {
+                    x: 7,
+                    y: 3
+                },
+                {
+                    x: 8,
+                    y: 8
+                },
+                {
+                    x: 9,
+                    y: 0
+                },
+
+            ],
+            d3.range(10).map((i) => {
+                return {
+                    x: i,
+                    y: Math.sin(i) + 5
+                }
+            })
+        ]
+
+        const svg = d3.select('body').append('svg')
+
+        svg.attr('width', width)
+            .attr('height', height)
+
+        var xScale = d3.scale.linear()
+            .domain([0, 10])
+            .range([margin, width - margin])
+
+        var yScale = d3.scale.linear()
+            .domain([0, 10])
+            .range([height - margin, margin])
+
+
+        // renderAxes(svg)
+        // render('linear-closed')
+        // render('step-before')
+        // render('step-after')
+        // render('basis')
+        // render('basis-open')
+        // render('basis-closed')
+        // render('bundle')
+        // render('cardinal')
+        // render('cardinal-open')
+        // render('cardinal-closed')
+        render('monotone')
+        renderDots(svg)
+
+        function render(mode) {
+            var line = d3.svg.line()
+                .interpolate(mode)
+                .x((d) => xScale(d.x))
+                .y((d) => yScale(d.y))
+
+            svg.selectAll('path.line')
+                .data(data)
+                .enter()
+                .append('path')
+                .attr('class', 'line')
+
+            svg.selectAll('path.line')
+                .data(data)
+                .attr('d', (d) => {
+
+                    return line(d)
+                })
+                .style('stroke', '#aaa')
+                .style('fill', 'none')
+
+        }
+
+
+        function renderDots(svg) {
+            data.forEach((set) => {
+                svg.append('g')
+                    .selectAll('circle')
+                    .data(set)
+                    .enter()
+                    .append('circle')
+                    .attr('cx', (d) => xScale(d.x))
+                    .attr('cy', (d) => yScale(d.y))
+                    .attr('r', 4.5)
+                    .style('stroke', '#aaa')
+                    .style('fill', '#aaa')
+            })
+        }
+    </script>
+</body>
+
+</html>
